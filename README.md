@@ -47,6 +47,8 @@ The following properties can be configured:
 | `showsSpecialShabbos`   | `true`             | Boolean that controls if the upcoming special shabbos (if applicable) is shown at the top
 | `showsYomTov`           | `true`             | Boolean that controls if today's yom tov (if applicable) is shown at the top
 | `alwaysShowDividerLine` | `false`            | Boolean that controls if the divider line is always shown (even if no top content is shown)
+| `showTomorrowsZmanim`   | `false`            | Boolean that controls if zmanim for the next 24 hours are shown
+| `showAllTomorrowsZmanim`| `false`            | Boolean that controls if zmanim for the next next day
 
 ## displayedFields
 displayedFields is a property in the config that controls the zmanim displayed and their names.  Its type is a JSON object with the 

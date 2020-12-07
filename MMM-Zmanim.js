@@ -59,6 +59,8 @@ Module.register("MMM-Zmanim", {
             const zmanEntry = this.zmanimArray[index];
             const currentDate = new Date();
             const zmanHasPassed = new Date(zmanEntry[1]) < currentDate.getTime();
+            const zmanIsFuture = new Date(zmanEntry[1]).getDate() != currentDate.getDate();
+            const zmanIsFarFuture =  new Date(zmanEntry[1]).getTime() - currentDate.getTime() > (1000 * 60 * 60 * 24);
             const arrayCount = this.zmanimArray.length;
             const baseOpacity = 0.2;
             const capOpacity = 0.4;
@@ -67,7 +69,9 @@ Module.register("MMM-Zmanim", {
             var row = document.createElement("tr");
             if (self.config.displaysPastZmanim && self.config.graysOutPastZmanim) {
                 row.style.opacity = zmanHasPassed ? (baseOpacity + (capOpacity - baseOpacity) * index / arrayCount) : 1.0;
-            } else if (!self.config.displaysPastZmanim && zmanHasPassed) {
+            } else if ((!self.config.displaysPastZmanim && zmanHasPassed) || 
+                        (zmanIsFarFuture && !self.config.showAllTomorrowsZmanim) || 
+                        (zmanIsFuture && !self.config.showTomorrowsZmanim)) {
                 continue;
             }
             
@@ -75,7 +79,7 @@ Module.register("MMM-Zmanim", {
 
             var titleCell = document.createElement("td");
 			titleCell.className = "zmanimTitle";
-			titleCell.innerHTML = zmanEntry[0] + ": ";
+			titleCell.innerHTML = (zmanIsFuture||zmanIsFarFuture? "*": "") + zmanEntry[0] + ": ";
 			row.appendChild(titleCell);
 
 			var valueCell = document.createElement("td");
@@ -92,6 +96,21 @@ Module.register("MMM-Zmanim", {
                     valueCell.style.borderTop = "1px solid white";
                 }
             }
+        }
+
+        if(self.config.showAllTomorrowsZmanim || self.config.showTomorrowsZmanim) {
+            var row = document.createElement("tr");
+            table.appendChild(row);
+
+            var titleCell = document.createElement("td");
+			titleCell.className = "zmanimTitle";
+			titleCell.innerHTML = "*";
+			row.appendChild(titleCell);
+
+			var valueCell = document.createElement("td");
+			valueCell.className = "zmanimValue";
+			valueCell.innerHTML = "tomorrow";
+            row.appendChild(valueCell);
         }
         
         return table

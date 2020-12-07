@@ -26,6 +26,11 @@ module.exports = NodeHelper.create({
             complexZmanim: true,
         };
         const zmanim = KosherZmanim.getZmanimJson(options)["Zmanim"];
+        let tomorrowZmanim;
+        if(config.showTomorrowsZmanim){
+            options.date.setDate(options.date.getDate() + 1 );
+            tomorrowZmanim = KosherZmanim.getZmanimJson(options)["Zmanim"];
+        }
 
         var zmanimDateArray = [];
         var calendarArray = [];
@@ -67,6 +72,14 @@ module.exports = NodeHelper.create({
             
             if (i in config.displayedFields) {
                 zmanimDateArray.push([config.displayedFields[i], zmanim[i], moment(zmanim[i]).format('h:mm A')])
+            }
+        }
+
+        if(config.showTomorrowsZmanim){
+            for (var i in tomorrowZmanim) {
+                if (i in config.displayedFields) {
+                    zmanimDateArray.push([config.displayedFields[i], tomorrowZmanim[i], moment(tomorrowZmanim[i]).format('h:mm A')])
+                }
             }
         }
 
